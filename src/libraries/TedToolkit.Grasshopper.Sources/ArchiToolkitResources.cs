@@ -14,9 +14,17 @@ internal static partial class TedToolkitResources
     {
         using var stream = typeof(TedToolkitResources).Assembly.GetManifestResourceStream(resourceName);
         if (stream is null) return null;
-        var bitmap = new Bitmap(stream);
-        if (bitmap.Width < 2 || bitmap.Height < 2) return null!;
-        return bitmap;
+        if (stream.Length is 0) return null;
+        try
+        {
+            var bitmap = new Bitmap(stream);
+            if (bitmap.Width < 2 || bitmap.Height < 2) return null!;
+            return bitmap;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static string GetKey(string key, string value)
