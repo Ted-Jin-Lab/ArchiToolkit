@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Version>2026.2.2.0</Version>
+    <Version>2026.4.11.0</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
@@ -12,7 +12,7 @@
     <IsApplicationProject>$(MSBuildProjectDirectory.Contains('applications'))</IsApplicationProject>
     <IsLibraryProject>$(MSBuildProjectDirectory.Contains('libraries'))</IsLibraryProject>
     <NeedPackage>False</NeedPackage>
-    <NeedPackage Condition="'$(MSBuildProjectName)' == 'TedToolkit.Grasshopper'">True</NeedPackage>
+    <NeedPackage Condition="'$(MSBuildProjectName)' == 'TedToolkit.CppInteropGen'">True</NeedPackage>
     <NeedRoslyn>False</NeedRoslyn>
     <NeedRoslyn Condition="!$(IsTestProject) and $(IsRoslynProject)">True</NeedRoslyn>
     <NeedAlmostAllFrameWorks>False</NeedAlmostAllFrameWorks>

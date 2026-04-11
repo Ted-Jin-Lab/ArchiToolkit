@@ -7,7 +7,14 @@ namespace TedToolkit.CppInteropGen;
 public abstract class CppObject(bool disposed = false) : IDisposable
 {
     private bool _disposed = disposed;
+    private NativeFunctionLoader? _loader;
     protected abstract string FileName { get; }
+    
+    private static readonly string Rid = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "win" :
+                                             RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" :
+                                             RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? "osx" :
+                                             throw new PlatformNotSupportedException("Unsupported OS platform"))
+                                         + "-" + RuntimeInformation.OSArchitecture.ToString().ToLower();
 
     private string FileFullPath
     {
@@ -18,22 +25,11 @@ public abstract class CppObject(bool disposed = false) : IDisposable
             var fullPath = Path.Combine(basePath, fileName);
             if (File.Exists(fullPath)) return fullPath;
 
-            var ridPath = Path.Combine(basePath, "runtimes", GetRid(), "native", fileName);
+            var ridPath = Path.Combine(basePath, "runtimes", Rid, "native", fileName);
             if (File.Exists(ridPath)) return ridPath;
 
             throw new DllNotFoundException($"Native library not found: {fullPath} or {ridPath}");
-
-            static string GetRid()
-            {
-                var prefix =
-                    RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "win" :
-                    RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux" :
-                    RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? "osx" :
-                    throw new PlatformNotSupportedException("Unsupported OS platform");
-
-                return prefix + "-" + RuntimeInformation.OSArchitecture.ToString().ToLower();
-            }
-
+            
             static string GetLibraryFileName(string baseName)
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -61,7 +57,7 @@ public abstract class CppObject(bool disposed = false) : IDisposable
     /// Get the Method Pointer.
     /// </summary>
     protected IntPtr GetFunctionPointer(string name) =>
-        NativeFunctionLoader.GetLoader(FileFullPath).GetFunctionPointer(name);
+        (_loader ??= NativeFunctionLoader.GetLoader(FileFullPath)).GetFunctionPointer(name);
 
     [DebuggerStepThrough]
     protected unsafe void ThrowIfError(IntPtr errorPtr)
