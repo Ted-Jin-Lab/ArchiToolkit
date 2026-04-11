@@ -12,7 +12,7 @@
     <IsApplicationProject>$(MSBuildProjectDirectory.Contains('applications'))</IsApplicationProject>
     <IsLibraryProject>$(MSBuildProjectDirectory.Contains('libraries'))</IsLibraryProject>
     <NeedPackage>False</NeedPackage>
-    <NeedPackage Condition="'$(MSBuildProjectName)' == 'TedToolkit.Grasshopper'">True</NeedPackage>
+    <NeedPackage Condition="'$(MSBuildProjectName)' == 'TedToolkit.CppInteropGen'">True</NeedPackage>
     <NeedRoslyn>False</NeedRoslyn>
     <NeedRoslyn Condition="!$(IsTestProject) and $(IsRoslynProject)">True</NeedRoslyn>
     <NeedAlmostAllFrameWorks>False</NeedAlmostAllFrameWorks>
