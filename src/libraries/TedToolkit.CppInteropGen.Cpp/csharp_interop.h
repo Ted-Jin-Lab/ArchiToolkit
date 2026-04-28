@@ -16,6 +16,7 @@ API_EXPORT char* FUNC_DECL {              \
 return (wrap_call([&] BODY));             \
 }
 
+#include <cstring>
 #include <string>
 #include <functional>
 
